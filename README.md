@@ -21,6 +21,8 @@ Then visit http://localhost:5000 🚀
 - **Statistics Dashboard**: View task counts and completion status
 - **REST API**: Full API endpoints for programmatic access
 - **Docker Support**: Easy deployment with Docker and Docker Compose
+- **Testing Suite**: Comprehensive unit tests with 69% coverage
+- **CI/CD Ready**: Multi-stage Docker builds with test automation
 - **Health Check**: Built-in health monitoring endpoint
 
 ## 🛠️ Tech Stack
@@ -28,7 +30,8 @@ Then visit http://localhost:5000 🚀
 - **Backend**: Python 3.11, Flask 2.3.3
 - **Frontend**: HTML5, CSS3, JavaScript, Bootstrap 5
 - **Icons**: Font Awesome 6
-- **Containerization**: Docker, Docker Compose
+- **Testing**: pytest, pytest-cov, coverage
+- **Containerization**: Docker, Docker Compose (multi-stage builds)
 - **Database**: In-memory storage (easily replaceable with PostgreSQL/MySQL)
 
 ## 🚀 Quick Start
@@ -94,10 +97,14 @@ docker run -p 5000:5000 darshlukkad3110/flask-task-manager:v1.0.0
 ```
 flask-web-app/
 ├── app.py                 # Main Flask application
+├── test_app.py           # Unit tests
 ├── requirements.txt       # Python dependencies
-├── Dockerfile            # Docker configuration
+├── pytest.ini           # Test configuration
+├── Makefile             # Development commands
+├── Dockerfile            # Multi-stage Docker configuration
 ├── docker-compose.yml    # Multi-container setup
 ├── .dockerignore         # Docker ignore file
+├── .gitignore           # Git ignore rules
 ├── README.md            # This file
 ├── templates/           # HTML templates
 │   ├── base.html       # Base template
@@ -209,6 +216,85 @@ docker logs flask-app
 docker exec -it flask-app /bin/bash
 ```
 
+## 🧪 Testing
+
+### Running Tests
+
+**Option 1: Docker Compose (Recommended)**
+```bash
+# Run all tests
+docker-compose run --rm test
+
+# Run tests with coverage
+docker-compose run --rm test-coverage
+
+# Run specific test
+docker-compose run --rm test python -m pytest test_app.py::TestTaskManager::test_home_page -v
+```
+
+**Option 2: Make Commands**
+```bash
+# Run tests in Docker
+make docker-test
+
+# Run tests with coverage
+make docker-test-coverage
+
+# Run tests locally (requires Python environment)
+make test
+
+# Run tests with coverage locally
+make test-coverage
+```
+
+**Option 3: Direct Docker Commands**
+```bash
+# Build test image
+docker build --target test -t flask-task-manager-test .
+
+# Run tests
+docker run --rm flask-task-manager-test
+
+# Run tests with coverage
+docker run --rm flask-task-manager-test python -m pytest test_app.py --cov=app --cov-report=term-missing
+```
+
+### Test Coverage
+
+- **Total Coverage**: 69%
+- **Test Count**: 11 tests
+- **Execution Time**: ~0.11 seconds
+- **Coverage Report**: Available in `htmlcov/` directory
+
+### Test Categories
+
+- ✅ **Web Routes**: Home page, forms, redirects
+- ✅ **API Endpoints**: CRUD operations, error handling
+- ✅ **Task Class**: Object creation, serialization
+- ✅ **Form Validation**: Input validation, error messages
+- ✅ **Health Checks**: System monitoring endpoints
+
+### CI/CD Integration
+
+The project is ready for continuous integration with:
+- **GitHub Actions**
+- **GitLab CI**
+- **Jenkins**
+- **Azure DevOps**
+
+Example GitHub Actions workflow:
+```yaml
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests
+        run: docker-compose run --rm test
+```
+
 ## 🔧 Configuration
 
 ### Environment Variables
@@ -224,19 +310,51 @@ environment:
   - SECRET_KEY=your-secret-key-here
 ```
 
-## 🎨 Customization
+## 🛠️ Development
+
+### Available Commands
+
+**Using Make (Recommended):**
+```bash
+# Development
+make install          # Install dependencies
+make run             # Run application locally
+make test            # Run tests locally
+make test-coverage   # Run tests with coverage
+
+# Docker
+make docker-build    # Build Docker image
+make docker-run      # Run Docker container
+make docker-test     # Run tests in Docker
+make docker-up       # Start all services
+make docker-down     # Stop all services
+
+# Cleanup
+make clean           # Clean temporary files
+```
+
+**Using Docker Compose:**
+```bash
+# Development
+docker-compose up --build          # Start application
+docker-compose run --rm test       # Run tests
+docker-compose run --rm test-coverage  # Run tests with coverage
+docker-compose down                # Stop services
+```
 
 ### Adding New Features
 1. **Backend**: Add new routes in `app.py`
 2. **Frontend**: Create new templates in `templates/`
 3. **Styling**: Modify `static/css/style.css`
 4. **JavaScript**: Add functionality in `static/js/app.js`
+5. **Tests**: Add tests in `test_app.py`
 
 ### Database Integration
 To add a real database (PostgreSQL/MySQL):
 1. Uncomment the database service in `docker-compose.yml`
 2. Install database adapter (e.g., `psycopg2` for PostgreSQL)
 3. Update `app.py` to use the database instead of in-memory storage
+4. Add database tests to `test_app.py`
 
 ## 🚀 Production Deployment
 
@@ -311,7 +429,7 @@ docker run -d -p 5000:5000 --name flask-task-manager \
 - Use Docker secrets for sensitive data
 - Set up monitoring and logging
 
-## 🧪 Testing
+## 🔍 Manual Testing
 
 **Run health check:**
 ```bash
@@ -328,6 +446,8 @@ curl -X POST http://localhost:5000/api/tasks \
   -H "Content-Type: application/json" \
   -d '{"title": "Test Task", "priority": "medium"}'
 ```
+
+> **Note**: For automated testing, see the [Testing section](#-testing) above.
 
 ## 📝 License
 
