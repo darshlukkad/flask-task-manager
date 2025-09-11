@@ -1,5 +1,5 @@
-# Use Python 3.11 slim image as base
-FROM python:3.11-slim
+# Multi-stage build for testing and production
+FROM python:3.11-slim as base
 
 # Set working directory
 WORKDIR /app
@@ -7,12 +7,12 @@ WORKDIR /app
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    FLASK_APP=app.py \
-    FLASK_ENV=production
+    FLASK_APP=app.py
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
@@ -23,6 +23,17 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
+
+# Test stage
+FROM base as test
+ENV FLASK_ENV=testing
+# Install additional test dependencies
+RUN pip install --no-cache-dir pytest pytest-cov coverage
+# Note: Tests are run via docker-compose or make commands, not during build
+
+# Production stage
+FROM base as production
+ENV FLASK_ENV=production
 
 # Create non-root user for security
 RUN adduser --disabled-password --gecos '' appuser && \

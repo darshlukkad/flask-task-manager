@@ -81,3 +81,4 @@ htmlcov/
 # Temporary files
 *.tmp
 *.temp
+flask-task-manager.tar.gz

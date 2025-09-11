@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   web:
-    build: .
+    build:
+      context: .
+      target: production
     ports:
       - "5000:5000"
     environment:
@@ -17,6 +19,26 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+
+  test:
+    build:
+      context: .
+      target: test
+    environment:
+      - FLASK_ENV=testing
+    volumes:
+      - .:/app
+    command: python -m pytest test_app.py -v --tb=short
+
+  test-coverage:
+    build:
+      context: .
+      target: test
+    environment:
+      - FLASK_ENV=testing
+    volumes:
+      - .:/app
+    command: python -m pytest test_app.py --cov=app --cov-report=html --cov-report=term-missing
 
   # Optional: Add a database service for production use
   # db:
