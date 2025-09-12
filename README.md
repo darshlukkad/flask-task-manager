@@ -469,6 +469,14 @@ curl -X POST http://localhost:5000/api/tasks \
 - Memory usage: Approximate resident memory of the running app process in steady state.
 - App response time: Typical request latency for a simple endpoint under light load.
 
+**Why the differences:**
+
+- Containers share the host kernel and have minimal userspace, so startup and memory footprints are smaller than full VMs.
+- The VM runs a full Ubuntu OS (system services, background daemons), which increases baseline memory and can lengthen cold starts.
+- Additional virtualization layers and I/O in the VM add latency; containers have fewer layers between the app and the host.
+- On macOS arm64, Docker uses native virtualization but still benefits from lightweight container images; Multipass Ubuntu has more packages and services enabled by default.
+- Network path in VMs can involve extra virtual NICs and NAT; the container path is typically simpler, yielding lower per-request overhead.
+
 ## 📝 License
 
 This project is open source and available under the [MIT License](LICENSE).
