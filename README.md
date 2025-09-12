@@ -449,6 +449,16 @@ curl -X POST http://localhost:5000/api/tasks \
 
 > **Note**: For automated testing, see the [Testing section](#-testing) above.
 
+## 📈 Performance
+
+| Metric              | Container (Docker) | VM (Vagrant) |
+|---------------------|--------------------|--------------|
+| Cold start          | 3692 ms            | 12444 ms     |
+| Memory usage        | 51.9 MB            | 267.8 MB     |
+| App response time   | 0.2 ms             | 5.2 ms       |
+
+These measurements reflect observed performance after deploying the app in a Docker container and in a Vagrant-managed virtual machine.
+
 ## 📝 License
 
 This project is open source and available under the [MIT License](LICENSE).
