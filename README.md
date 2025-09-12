@@ -457,7 +457,17 @@ curl -X POST http://localhost:5000/api/tasks \
 | Memory usage        | 51.9 MB            | 267.8 MB     |
 | App response time   | 0.2 ms             | 5.2 ms       |
 
-These measurements reflect observed performance after deploying the app in a Docker container and in a Vagrant-managed virtual machine.
+**Test environment:**
+
+- Host: macOS (Apple Silicon, arm64)
+- VM: Ubuntu 24.02 via Multipass
+- Container runtime: Docker
+
+**Metrics explained:**
+
+- Cold start: Time from starting the app process until the first successful HTTP response.
+- Memory usage: Approximate resident memory of the running app process in steady state.
+- App response time: Typical request latency for a simple endpoint under light load.
 
 ## 📝 License
 
