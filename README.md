@@ -1,3 +1,5 @@
+# CI/CD: ![CI/CD](https://github.com/darshlukkad/flask-task-manager/actions/workflows/ci-cd.yml/badge.svg)
+
 # 🚀 Flask Task Manager Web Application
 
 A modern, responsive web application built with Flask and Bootstrap for managing tasks. Features a beautiful UI, REST API, and Docker support.
@@ -294,6 +296,63 @@ jobs:
       - name: Run tests
         run: docker-compose run --rm test
 ```
+
+## ✅ Test the full CI/CD pipeline (end-to-end)
+
+This repo's workflow runs tests, builds a Docker image and pushes it to GitHub Container Registry (GHCR). You can verify the full flow locally and on GitHub using the steps below.
+
+A. Run the CI test job locally (matches Actions `test` job)
+```bash
+# Run tests inside the same container used by CI (no local pytest install required)
+docker-compose run --rm test
+```
+
+B. Build the image and deploy locally (simulate `deploy_to_local`)
+```bash
+# Build image (tagged like GHCR for parity with the workflow)
+docker build -t ghcr.io/darshlukkad/flask-task-manager:latest .
+
+# Stop and remove any existing container (if necessary)
+docker stop flask-task-manager || true
+docker rm -f flask-task-manager || true
+
+# Run the new image (maps host 5000 to container 5000)
+docker run -d --name flask-task-manager -p 5000:5000 ghcr.io/darshlukkad/flask-task-manager:latest
+
+# Verify health
+curl http://localhost:5000/health
+```
+
+C. Trigger CI/CD on GitHub
+```bash
+git add -A
+git commit -m "ci: trigger full workflow"
+git push origin main
+```
+- In the repository Actions tab you will see the `test` and `build_and_push` jobs run.
+- After the build_and_push job completes the image will be pushed to GHCR at `ghcr.io/darshlukkad/flask-task-manager:latest`.
+
+D. Deploy to your local machine via a self-hosted runner (recommended)
+- Register a self-hosted runner: GitHub -> Settings -> Actions -> Runners -> New self-hosted runner. Label it `local-deploy`.
+- Ensure Docker is installed on the runner machine and the runner user can run Docker.
+- Push to `main`: the `deploy_to_local` job will run on your runner, pull the GHCR image and replace the running container.
+
+E. Deploy via SSH (alternative)
+- Generate an SSH key pair on your workstation and add the public key to `~/.ssh/authorized_keys` on the target machine.
+- Add the private key and connection info to repository Secrets: `SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY`, `SSH_PORT` (optional).
+- Push to `main`: the `deploy_via_ssh` job will SSH to your machine, pull the image and restart the container.
+
+Notes & troubleshooting
+- The workflow uses `GITHUB_TOKEN` to authenticate and push images to GHCR. If you pull the GHCR image manually from your machine you may need to run `docker login ghcr.io` with a GitHub username and a personal access token that has `read:packages` permission.
+- If `docker run` fails with "Bind for 0.0.0.0:5000 failed: port is already allocated", identify the process/container using port 5000 and stop it:
+```bash
+lsof -i :5000
+docker ps -a
+docker stop <container-id>
+docker rm -f <container-id>
+```
+- To avoid stopping services, you can run the new container on a different host port: `docker run -d -p 5001:5000 ...` and then access `http://localhost:5001`.
+
 
 ## 🔧 Configuration
 
