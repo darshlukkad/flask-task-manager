@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: task-manager
+data:
+  # Database configuration
+  POSTGRES_DB: taskmanager
+  POSTGRES_USER: taskuser
+  
+  # Backend API URL for frontend
+  BACKEND_API_URL: http://backend-api:5000
+  
+  # Application settings
+  FLASK_ENV: production

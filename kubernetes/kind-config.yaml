@@ -1,0 +1,11 @@
+# kind cluster configuration for task-manager
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: task-manager
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      # Map NodePort to host for easy access
+      - containerPort: 30080
+        hostPort: 30080
+        protocol: TCP

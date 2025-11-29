@@ -23,18 +23,20 @@ Then visit http://localhost:5000 🚀
 - **Statistics Dashboard**: View task counts and completion status
 - **REST API**: Full API endpoints for programmatic access
 - **Docker Support**: Easy deployment with Docker and Docker Compose
+- **Kubernetes Support**: Production-ready microservices deployment
 - **Testing Suite**: Comprehensive unit tests with 69% coverage
 - **CI/CD Ready**: Multi-stage Docker builds with test automation
 - **Health Check**: Built-in health monitoring endpoint
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Python 3.11, Flask 2.3.3
+- **Backend**: Python 3.11, Flask 2.3.3, SQLAlchemy
 - **Frontend**: HTML5, CSS3, JavaScript, Bootstrap 5
+- **Database**: PostgreSQL 15 (Kubernetes), In-memory (Docker)
 - **Icons**: Font Awesome 6
 - **Testing**: pytest, pytest-cov, coverage
 - **Containerization**: Docker, Docker Compose (multi-stage builds)
-- **Database**: In-memory storage (easily replaceable with PostgreSQL/MySQL)
+- **Orchestration**: Kubernetes (kind, minikube, GKE, EKS, AKS compatible)
 
 ## 🚀 Quick Start
 
@@ -94,20 +96,52 @@ docker run -p 5000:5000 darshlukkad3110/flask-task-manager:v1.0.0
 4. **Access the application:**
    - Web UI: http://localhost:5000
 
+### Option 4: Kubernetes (Production-Ready Microservices)
+
+**Deploy a scalable microservices architecture on Kubernetes:**
+
+1. **Quick start with automated script:**
+   ```bash
+   git clone https://github.com/darshlukkad/flask-task-manager.git
+   cd flask-task-manager
+   ./deploy.sh
+   ```
+
+2. **Access the application:**
+   - Web UI: http://localhost:30080
+   - Backend API: `kubectl port-forward -n task-manager svc/backend-api 5000:5000`
+
+**Microservices Architecture**:
+- **Frontend**: 2 replicas serving web UI
+- **Backend API**: 2 replicas handling business logic
+- **PostgreSQL**: Persistent database with 1Gi storage
+
+**Features**:
+- ✅ High availability with multiple replicas
+- ✅ Data persistence with PostgreSQL
+- ✅ Horizontal scaling capability
+- ✅ Production-ready configuration
+- ✅ Health checks and monitoring
+
+**Documentation**:
+- **Architecture**: See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for detailed diagrams
+- **Deployment Guide**: See [docs/KUBERNETES_DEPLOYMENT.md](docs/KUBERNETES_DEPLOYMENT.md)
+- **Walkthrough**: Complete deployment walkthrough in artifacts
+
 ## 📁 Project Structure
 
+### Monolithic Application (Docker)
+
 ```
-flask-web-app/
-├── app.py                 # Main Flask application
+flask-task-manager/
+├── app.py                 # Main Flask application (monolithic)
 ├── test_app.py           # Unit tests
 ├── requirements.txt       # Python dependencies
 ├── pytest.ini           # Test configuration
 ├── Makefile             # Development commands
 ├── Dockerfile            # Multi-stage Docker configuration
 ├── docker-compose.yml    # Multi-container setup
-├── .dockerignore         # Docker ignore file
-├── .gitignore           # Git ignore rules
-├── README.md            # This file
+├── deploy.sh             # Kubernetes deployment script
 ├── templates/           # HTML templates
 │   ├── base.html       # Base template
 │   ├── index.html      # Home page
@@ -117,6 +151,36 @@ flask-web-app/
     │   └── style.css   # Custom styles
     └── js/
         └── app.js      # JavaScript functionality
+```
+
+### Microservices Architecture (Kubernetes)
+
+```
+flask-task-manager/
+├── backend-api/           # Backend API microservice
+│   ├── app.py            # Flask REST API
+│   ├── models.py         # SQLAlchemy models
+│   ├── database.py       # Database configuration
+│   ├── Dockerfile        # Backend container image
+│   └── requirements.txt  # Backend dependencies
+├── frontend/             # Frontend UI microservice
+│   ├── app.py            # Flask UI server
+│   ├── templates/        # HTML templates
+│   ├── static/           # CSS, JS assets
+│   ├── Dockerfile        # Frontend container image
+│   └── requirements.txt  # Frontend dependencies
+├── kubernetes/           # Kubernetes manifests
+│   ├── namespace.yaml
+│   ├── configmap.yaml
+│   ├── secret.yaml
+│   ├── postgres-*.yaml   # Database resources
+│   ├── backend-*.yaml    # Backend API resources
+│   ├── frontend-*.yaml   # Frontend resources
+│   └── kind-config.yaml  # kind cluster configuration
+└── docs/                 # Documentation
+    ├── ARCHITECTURE.md   # Architecture diagrams
+    ├── KUBERNETES_DEPLOYMENT.md  # Deployment guide
+    └── CI_CD.md          # CI/CD documentation
 ```
 
 ## 🔌 API Endpoints
