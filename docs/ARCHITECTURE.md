@@ -8,18 +8,18 @@ This document outlines the evolution of the Flask Task Manager from a monolithic
 
 ```mermaid
 graph TB
-    User[👤 User Browser]
-    Docker[🐳 Docker Container<br/>Port: 5000]
-    App[📦 Flask Application<br/>app.py]
+    User["👤 User Browser"]
+    Docker["🐳 Docker Container<br/>Port: 5000"]
+    App["📦 Flask Application<br/>app.py"]
     
     User -->|HTTP Requests| Docker
     Docker -.->|Contains| App
     
     subgraph "Application Components"
-        App --> UI[🖥️ Web UI Templates]
-        App --> API[🔌 REST API]
-        App --> Logic[⚙️ Business Logic]
-        App --> Storage[💾 In-Memory Storage<br/>tasks = []]
+        App --> UI["🖥️ Web UI Templates"]
+        App --> API["🔌 REST API"]
+        App --> Logic["⚙️ Business Logic"]
+        App --> Storage["💾 In-Memory Storage<br/>tasks array"]
     end
     
     style Docker fill:#3498db,stroke:#2980b9,stroke-width:3px,color:#fff
@@ -57,11 +57,11 @@ graph TB
 
 ```mermaid
 graph TB
-    User[👤 User Browser]
+    User["👤 User Browser"]
     
-    subgraph K8s[☸️ Kubernetes Cluster - Namespace: task-manager]
+    subgraph K8s["☸️ Kubernetes Cluster - Namespace: task-manager"]
         subgraph Frontend[Frontend Layer]
-            FrontSvc[🌐 Frontend Service<br/>NodePort: 30080]
+            FrontSvc["🌐 Frontend Service<br/>NodePort: 30080"]
             FrontPod1[Frontend Pod 1]
             FrontPod2[Frontend Pod 2]
             
@@ -70,7 +70,7 @@ graph TB
         end
         
         subgraph Backend[Backend Layer]
-            BackSvc[🔌 Backend API Service<br/>ClusterIP: 5000]
+            BackSvc["🔌 Backend API Service<br/>ClusterIP: 5000"]
             BackPod1[Backend Pod 1]
             BackPod2[Backend Pod 2]
             
@@ -79,16 +79,16 @@ graph TB
         end
         
         subgraph Database[Database Layer]
-            DBSvc[🗄️ PostgreSQL Service<br/>ClusterIP: 5432]
+            DBSvc["🗄️ PostgreSQL Service<br/>ClusterIP: 5432"]
             DBPod[PostgreSQL Pod]
-            PV[💾 PersistentVolume<br/>1Gi Storage]
+            PV["💾 PersistentVolume<br/>1Gi Storage"]
             
             DBSvc --> DBPod
             DBPod --> PV
         end
         
-        ConfigMap[📋 ConfigMap<br/>App Configuration]
-        Secret[🔐 Secret<br/>DB Credentials]
+        ConfigMap["📋 ConfigMap<br/>App Configuration"]
+        Secret["🔐 Secret<br/>DB Credentials"]
     end
     
     User -->|HTTP| FrontSvc
@@ -308,15 +308,15 @@ graph TB
     subgraph Cluster[kind-task-manager Cluster]
         subgraph NS[Namespace: task-manager]
             subgraph Compute[Compute Resources]
-                D1[Deployment: frontend<br/>Replicas: 2]
-                D2[Deployment: backend-api<br/>Replicas: 2]
-                D3[Deployment: postgres<br/>Replicas: 1]
+                D1["Deployment: frontend<br/>Replicas: 2"]
+                D2["Deployment: backend-api<br/>Replicas: 2"]
+                D3["Deployment: postgres<br/>Replicas: 1"]
             end
             
             subgraph Network[Network Resources]
-                S1[Service: frontend<br/>NodePort: 30080]
-                S2[Service: backend-api<br/>ClusterIP]
-                S3[Service: postgres<br/>ClusterIP]
+                S1["Service: frontend<br/>NodePort: 30080"]
+                S2["Service: backend-api<br/>ClusterIP"]
+                S3["Service: postgres<br/>ClusterIP"]
             end
             
             subgraph Config[Configuration]
@@ -325,7 +325,7 @@ graph TB
             end
             
             subgraph Storage[Storage Resources]
-                PVC[PVC: postgres-pvc<br/>1Gi]
+                PVC["PVC: postgres-pvc<br/>1Gi"]
                 PV[PV: Auto-provisioned]
             end
             
