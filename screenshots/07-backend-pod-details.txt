@@ -1,0 +1,64 @@
+Name:             backend-api-cf947c7b9-4g8qv
+Namespace:        task-manager
+Priority:         0
+Service Account:  default
+Node:             task-manager-control-plane/172.22.0.2
+Start Time:       Sat, 29 Nov 2025 12:09:35 -0800
+Labels:           app=backend-api
+                  pod-template-hash=cf947c7b9
+Annotations:      kubectl.kubernetes.io/restartedAt: 2025-11-29T12:09:23-08:00
+Status:           Running
+IP:               10.244.0.13
+IPs:
+  IP:           10.244.0.13
+Controlled By:  ReplicaSet/backend-api-cf947c7b9
+Containers:
+  backend-api:
+    Container ID:   containerd://a4110fc024280233884ea9514c387e82db3d7f449b02b555451ba7b861060495
+    Image:          flask-task-manager-backend:latest
+    Image ID:       sha256:a94ce753c755e2b8c2290e7ac4a703e64dd3fce197ce422b49cdb685f26da93e
+    Port:           5000/TCP (http)
+    Host Port:      0/TCP (http)
+    State:          Running
+      Started:      Sat, 29 Nov 2025 12:09:35 -0800
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     500m
+      memory:  512Mi
+    Requests:
+      cpu:      250m
+      memory:   256Mi
+    Liveness:   http-get http://:5000/health delay=45s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:5000/health delay=10s timeout=1s period=5s #success=1 #failure=3
+    Environment:
+      POSTGRES_USER:      <set to the key 'POSTGRES_USER' of config map 'app-config'>      Optional: false
+      POSTGRES_PASSWORD:  <set to the key 'POSTGRES_PASSWORD' in secret 'db-credentials'>  Optional: false
+      POSTGRES_DB:        <set to the key 'POSTGRES_DB' of config map 'app-config'>        Optional: false
+      DATABASE_URL:       postgresql://taskuser:taskpass@postgres:5432/taskmanager
+      FLASK_ENV:          <set to the key 'FLASK_ENV' of config map 'app-config'>   Optional: false
+      SECRET_KEY:         <set to the key 'SECRET_KEY' in secret 'db-credentials'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-sn8rp (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-sn8rp:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age   From     Message
+  ----     ------     ----  ----     -------
+  Warning  Unhealthy  58m   kubelet  Liveness probe failed: Get "http://10.244.0.13:5000/health": context deadline exceeded (Client.Timeout exceeded while awaiting headers)

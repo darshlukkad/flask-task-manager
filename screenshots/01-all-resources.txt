@@ -1,0 +1,25 @@
+NAME                              READY   STATUS    RESTARTS   AGE    IP            NODE                         NOMINATED NODE   READINESS GATES
+pod/backend-api-cf947c7b9-4g8qv   1/1     Running   0          135m   10.244.0.13   task-manager-control-plane   <none>           <none>
+pod/backend-api-cf947c7b9-sn9bf   1/1     Running   0          135m   10.244.0.12   task-manager-control-plane   <none>           <none>
+pod/frontend-676676c8c-7bnq8      1/1     Running   0          110m   10.244.0.17   task-manager-control-plane   <none>           <none>
+pod/frontend-676676c8c-8nqgv      1/1     Running   0          110m   10.244.0.16   task-manager-control-plane   <none>           <none>
+pod/postgres-585d64cd8-2jxlw      1/1     Running   0          151m   10.244.0.6    task-manager-control-plane   <none>           <none>
+
+NAME                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE    SELECTOR
+service/backend-api   ClusterIP   10.96.78.120    <none>        5000/TCP         150m   app=backend-api
+service/frontend      NodePort    10.96.210.190   <none>        8080:30080/TCP   150m   app=frontend
+service/postgres      ClusterIP   10.96.19.1      <none>        5432/TCP         151m   app=postgres
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS    IMAGES                               SELECTOR
+deployment.apps/backend-api   2/2     2            2           150m   backend-api   flask-task-manager-backend:latest    app=backend-api
+deployment.apps/frontend      2/2     2            2           150m   frontend      flask-task-manager-frontend:latest   app=frontend
+deployment.apps/postgres      1/1     1            1           151m   postgres      postgres:15-alpine                   app=postgres
+
+NAME                                     DESIRED   CURRENT   READY   AGE    CONTAINERS    IMAGES                               SELECTOR
+replicaset.apps/backend-api-55fb59bd64   0         0         0       135m   backend-api   flask-task-manager-backend:latest    app=backend-api,pod-template-hash=55fb59bd64
+replicaset.apps/backend-api-6bf7b5fc9f   0         0         0       150m   backend-api   flask-task-manager-backend:latest    app=backend-api,pod-template-hash=6bf7b5fc9f
+replicaset.apps/backend-api-cf947c7b9    2         2         2       135m   backend-api   flask-task-manager-backend:latest    app=backend-api,pod-template-hash=cf947c7b9
+replicaset.apps/frontend-676676c8c       2         2         2       110m   frontend      flask-task-manager-frontend:latest   app=frontend,pod-template-hash=676676c8c
+replicaset.apps/frontend-6c579bf94       0         0         0       150m   frontend      flask-task-manager-frontend:latest   app=frontend,pod-template-hash=6c579bf94
+replicaset.apps/frontend-775758c76c      0         0         0       111m   frontend      flask-task-manager-frontend:latest   app=frontend,pod-template-hash=775758c76c
+replicaset.apps/postgres-585d64cd8       1         1         1       151m   postgres      postgres:15-alpine                   app=postgres,pod-template-hash=585d64cd8

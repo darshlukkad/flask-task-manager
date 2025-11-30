@@ -1,0 +1,61 @@
+Name:             frontend-676676c8c-7bnq8
+Namespace:        task-manager
+Priority:         0
+Service Account:  default
+Node:             task-manager-control-plane/172.22.0.2
+Start Time:       Sat, 29 Nov 2025 12:34:15 -0800
+Labels:           app=frontend
+                  pod-template-hash=676676c8c
+Annotations:      kubectl.kubernetes.io/restartedAt: 2025-11-29T12:34:07-08:00
+Status:           Running
+IP:               10.244.0.17
+IPs:
+  IP:           10.244.0.17
+Controlled By:  ReplicaSet/frontend-676676c8c
+Containers:
+  frontend:
+    Container ID:   containerd://ef77514c2ddd4fbc4f3f17e89659b7108da935109a0371997e19753226c36d73
+    Image:          flask-task-manager-frontend:latest
+    Image ID:       sha256:f594973eefa57b1dc196a349d1991810328749aef10f2a3e6e66342825033154
+    Port:           8080/TCP (http)
+    Host Port:      0/TCP (http)
+    State:          Running
+      Started:      Sat, 29 Nov 2025 12:34:16 -0800
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     250m
+      memory:  256Mi
+    Requests:
+      cpu:      100m
+      memory:   128Mi
+    Liveness:   http-get http://:8080/health delay=30s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:8080/health delay=5s timeout=1s period=5s #success=1 #failure=3
+    Environment:
+      FLASK_ENV:        <set to the key 'FLASK_ENV' of config map 'app-config'>        Optional: false
+      SECRET_KEY:       <set to the key 'SECRET_KEY' in secret 'db-credentials'>       Optional: false
+      BACKEND_API_URL:  <set to the key 'BACKEND_API_URL' of config map 'app-config'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-dqkk9 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-dqkk9:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age   From     Message
+  ----     ------     ----  ----     -------
+  Warning  Unhealthy  58m   kubelet  Liveness probe failed: Get "http://10.244.0.17:8080/health": context deadline exceeded (Client.Timeout exceeded while awaiting headers)

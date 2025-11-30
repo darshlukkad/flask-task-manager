@@ -1,0 +1,4 @@
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS    IMAGES                               SELECTOR
+backend-api   2/2     2            2           150m   backend-api   flask-task-manager-backend:latest    app=backend-api
+frontend      2/2     2            2           150m   frontend      flask-task-manager-frontend:latest   app=frontend
+postgres      1/1     1            1           151m   postgres      postgres:15-alpine                   app=postgres

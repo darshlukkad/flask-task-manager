@@ -1,0 +1,6 @@
+NAME                          READY   STATUS    RESTARTS   AGE    IP            NODE                         NOMINATED NODE   READINESS GATES
+backend-api-cf947c7b9-4g8qv   1/1     Running   0          135m   10.244.0.13   task-manager-control-plane   <none>           <none>
+backend-api-cf947c7b9-sn9bf   1/1     Running   0          135m   10.244.0.12   task-manager-control-plane   <none>           <none>
+frontend-676676c8c-7bnq8      1/1     Running   0          110m   10.244.0.17   task-manager-control-plane   <none>           <none>
+frontend-676676c8c-8nqgv      1/1     Running   0          110m   10.244.0.16   task-manager-control-plane   <none>           <none>
+postgres-585d64cd8-2jxlw      1/1     Running   0          151m   10.244.0.6    task-manager-control-plane   <none>           <none>

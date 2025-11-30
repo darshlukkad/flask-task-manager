@@ -1,0 +1,4 @@
+NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE    SELECTOR
+backend-api   ClusterIP   10.96.78.120    <none>        5000/TCP         150m   app=backend-api
+frontend      NodePort    10.96.210.190   <none>        8080:30080/TCP   150m   app=frontend
+postgres      ClusterIP   10.96.19.1      <none>        5432/TCP         151m   app=postgres

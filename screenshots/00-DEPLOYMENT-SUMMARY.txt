@@ -1,0 +1,44 @@
+# KUBERNETES DEPLOYMENT VERIFICATION
+
+## Cluster Information
+task-manager
+
+
+## All Resources in task-manager Namespace
+NAME                              READY   STATUS    RESTARTS   AGE
+pod/backend-api-cf947c7b9-4g8qv   1/1     Running   0          135m
+pod/backend-api-cf947c7b9-sn9bf   1/1     Running   0          135m
+pod/frontend-676676c8c-7bnq8      1/1     Running   0          110m
+pod/frontend-676676c8c-8nqgv      1/1     Running   0          110m
+pod/postgres-585d64cd8-2jxlw      1/1     Running   0          151m
+
+NAME                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+service/backend-api   ClusterIP   10.96.78.120    <none>        5000/TCP         150m
+service/frontend      NodePort    10.96.210.190   <none>        8080:30080/TCP   150m
+service/postgres      ClusterIP   10.96.19.1      <none>        5432/TCP         151m
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/backend-api   2/2     2            2           150m
+deployment.apps/frontend      2/2     2            2           150m
+deployment.apps/postgres      1/1     1            1           151m
+
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/backend-api-55fb59bd64   0         0         0       135m
+replicaset.apps/backend-api-6bf7b5fc9f   0         0         0       150m
+replicaset.apps/backend-api-cf947c7b9    2         2         2       135m
+replicaset.apps/frontend-676676c8c       2         2         2       110m
+replicaset.apps/frontend-6c579bf94       0         0         0       150m
+replicaset.apps/frontend-775758c76c      0         0         0       111m
+replicaset.apps/postgres-585d64cd8       1         1         1       151m
+
+
+## Services
+NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE    SELECTOR
+backend-api   ClusterIP   10.96.78.120    <none>        5000/TCP         150m   app=backend-api
+frontend      NodePort    10.96.210.190   <none>        8080:30080/TCP   150m   app=frontend
+postgres      ClusterIP   10.96.19.1      <none>        5432/TCP         151m   app=postgres
+
+
+## Persistent Storage
+NAME           STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+postgres-pvc   Bound    pvc-c5381223-4358-4d9e-8417-6aaceefba49a   1Gi        RWO            standard       <unset>                 151m
